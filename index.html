@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ekskul Maisya - Jurnal & Presensi Pengampu</title>
+  <title>Ekskul Maisya - Presensi Leger & Jurnal Pengampu</title>
   
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#065f46">
+  <meta name="theme-color" content="#064e3b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Ekskul Maisya">
@@ -27,137 +27,438 @@
     :root {
       --primary: #065f46;
       --primary-dark: #022c22;
+      --primary-deep: #064e3b;
       --primary-light: #059669;
       --accent: #f59e0b;
-      --bg-surface: #f8fafc;
+      --sidebar-w: 280px;
+      --topbar-h: 64px;
+      --bg-body: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border-color: #e2e8f0;
+      --border-subtle: #f1f5f9;
       --radius-lg: 18px;
       --radius-md: 12px;
+      --radius-sm: 8px;
     }
+
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-surface);
+      background-color: var(--bg-body);
       color: var(--text-main);
-      padding-bottom: 90px;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
 
     .font-arabic { font-family: 'Amiri', serif; }
 
-    .hero-header {
-      background: linear-gradient(145deg, var(--primary-dark), var(--primary), var(--primary-light));
+    /* ==========================================
+       SIDEBAR NAVIGASI ULTRA ELEGAN
+       ========================================== */
+    .app-sidebar {
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, #022c22 0%, #064e3b 45%, #065f46 100%);
       color: #ffffff;
-      padding: 26px 20px 36px 20px;
-      border-bottom-left-radius: 26px;
-      border-bottom-right-radius: 26px;
-      position: relative;
-      box-shadow: 0 10px 25px -5px rgba(6, 95, 70, 0.3);
-    }
-    .hero-header::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.18) 0%, transparent 60%);
-      pointer-events: none;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1050;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 25px rgba(2, 44, 34, 0.18);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .badge-role {
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(8px);
+    .sidebar-brand {
+      padding: 24px 20px 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(255, 255, 255, 0.15));
+      border: 1.5px solid rgba(245, 158, 11, 0.5);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-profile-card {
+      margin: 16px 14px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+    }
+    .sidebar-profile-card:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .sidebar-nav {
+      padding: 8px 12px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .sidebar-nav-title {
       font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255, 255, 255, 0.45);
+      padding: 10px 12px 6px 12px;
     }
 
-    .main-card {
+    .nav-item-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      color: rgba(255, 255, 255, 0.8);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 13.5px;
+      text-align: left;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+    }
+    .nav-item-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+    .nav-item-btn.active {
+      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      font-weight: 700;
+    }
+    .nav-item-btn i { font-size: 17px; }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    /* Backdrop untuk mobile drawer */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1035;
+    }
+
+    /* ==========================================
+       MAIN CONTENT CONTAINER
+       ========================================== */
+    .app-main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 90px;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .app-topbar {
+      height: var(--topbar-h);
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .content-body {
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991.98px) {
+      .app-sidebar {
+        transform: translateX(-100%);
+      }
+      .app-sidebar.show {
+        transform: translateX(0);
+      }
+      .sidebar-backdrop.show {
+        display: block;
+      }
+      .app-main {
+        margin-left: 0;
+      }
+      .content-body {
+        padding: 16px 12px;
+      }
+    }
+
+    /* ==========================================
+       CARDS & FORMS ELEGAN
+       ========================================== */
+    .card-modern {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
-      margin-top: -20px;
-      position: relative;
-      z-index: 10;
-      padding: 20px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+      padding: 22px;
+      margin-bottom: 20px;
+      transition: box-shadow 0.2s;
     }
 
-    .form-label {
-      font-size: 12px;
+    .form-label-custom {
+      font-size: 11.5px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
       color: #475569;
       margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .form-control, .form-select {
+    .form-control-custom, .form-select-custom {
       border-radius: var(--radius-md);
       border: 1.5px solid var(--border-color);
-      padding: 10px 14px;
-      font-size: 14px;
+      padding: 9px 13px;
+      font-size: 13.5px;
       transition: all 0.2s;
     }
-    .form-control:focus, .form-select:focus {
+    .form-control-custom:focus, .form-select-custom:focus {
       border-color: var(--primary-light);
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
     }
 
-    .santri-row {
+    /* ==========================================
+       ABSEN LEGER LANDSCAPE TABLE (MODERN & SLEEK)
+       ========================================== */
+    .leger-card {
       background: #ffffff;
+      border-radius: var(--radius-lg);
       border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      transition: all 0.2s ease;
-    }
-    .santri-row:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      margin-bottom: 24px;
     }
 
-    .status-btn-group .btn {
+    .leger-header-bar {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1.5px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .leger-table-wrap {
+      overflow-x: auto;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-leger {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 0;
+      font-size: 13px;
+    }
+
+    .table-leger thead th {
+      background: #0f172a;
+      color: #f8fafc;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 12px 14px;
+      border: none;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .table-leger tbody td {
+      padding: 10px 14px;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #ffffff;
+      transition: background 0.15s;
+    }
+
+    .table-leger tbody tr:hover td {
+      background: #f8fafc;
+    }
+
+    .table-leger tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Status Presence Pill Segment Buttons (H, I, S, A) */
+    .presensi-pill-group {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 10px;
+      gap: 2px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .presensi-btn-pill {
+      border: none;
+      background: transparent;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 7px;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .presensi-btn-pill:hover {
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .presensi-btn-pill.active-h {
+      background: #059669;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.35);
+    }
+    .presensi-btn-pill.active-i {
+      background: #d97706;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.35);
+    }
+    .presensi-btn-pill.active-s {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+    }
+    .presensi-btn-pill.active-a {
+      background: #dc2626;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+    }
+
+    /* Nilai Predikat Select */
+    .select-predikat-leger {
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
       font-size: 12px;
       font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 4px 8px;
+      width: 100px;
+      text-align: center;
+      background-color: #ffffff;
+      transition: all 0.2s;
+    }
+    .select-predikat-leger:focus {
+      border-color: var(--primary-light);
+      outline: none;
     }
 
-    .nav-pills-custom .nav-link {
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 13px;
-      border-radius: 12px;
-      padding: 8px 16px;
+    /* Inline Note Input */
+    .input-catatan-leger {
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      width: 100%;
+      min-width: 140px;
+      transition: all 0.2s;
     }
-    .nav-pills-custom .nav-link.active {
-      background-color: var(--primary);
-      color: #ffffff;
+    .input-catatan-leger:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .input-catatan-leger:focus {
+      background: #ffffff;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
+      outline: none;
     }
 
+    /* Live KPI Chips */
+    .kpi-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+    .kpi-chip-h { background: rgba(5, 150, 105, 0.1); color: #059669; border-color: rgba(5, 150, 105, 0.2); }
+    .kpi-chip-i { background: rgba(217, 119, 6, 0.1); color: #d97706; border-color: rgba(217, 119, 6, 0.2); }
+    .kpi-chip-s { background: rgba(2, 132, 199, 0.1); color: #0284c7; border-color: rgba(2, 132, 199, 0.2); }
+    .kpi-chip-a { background: rgba(220, 38, 38, 0.1); color: #dc2626; border-color: rgba(220, 38, 38, 0.2); }
+
+    /* Floating Save Bar */
     .floating-save-bar {
       position: fixed;
       bottom: 0;
-      left: 0;
       right: 0;
-      background: rgba(255, 255, 255, 0.95);
+      left: var(--sidebar-w);
+      background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border-color);
-      padding: 12px 20px;
+      border-top: 1.5px solid var(--border-color);
+      padding: 12px 24px;
       z-index: 1000;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: left 0.3s;
+    }
+    @media (max-width: 991.98px) {
+      .floating-save-bar { left: 0; padding: 12px 16px; }
     }
 
     .btn-save-jurnal {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: linear-gradient(135deg, #065f46 0%, #059669 100%);
       color: #ffffff;
       font-weight: 700;
-      border-radius: 14px;
-      padding: 12px 24px;
+      border-radius: 12px;
+      padding: 10px 24px;
       border: none;
       box-shadow: 0 4px 14px rgba(6, 95, 70, 0.35);
       transition: all 0.2s;
@@ -166,14 +467,6 @@
       transform: translateY(-1px);
       box-shadow: 0 6px 18px rgba(6, 95, 70, 0.45);
       color: #ffffff;
-    }
-    .btn-save-jurnal:active { transform: translateY(1px); }
-
-    .stat-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 6px;
     }
 
     /* ==========================================
@@ -184,21 +477,18 @@
       border-radius: var(--radius-lg);
       border: 1px solid var(--border-color);
       box-shadow: 0 10px 30px -5px rgba(6, 95, 70, 0.12), 0 4px 18px rgba(0, 0, 0, 0.04);
-      margin-top: -24px;
-      position: relative;
-      z-index: 10;
-      padding: 36px 24px 30px 24px;
+      padding: 40px 28px 34px 28px;
       text-align: center;
       overflow: hidden;
+      max-width: 580px;
+      margin: 30px auto;
+      position: relative;
     }
 
     .loading-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
+      top: 0; left: 0; right: 0; height: 4px;
       background: linear-gradient(90deg, #059669, #f59e0b, #10b981, #059669);
       background-size: 300% 100%;
       animation: gradientSlide 2s linear infinite;
@@ -210,7 +500,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Centerpiece Visual Pulse & Ring */
     .loader-orb-wrap {
       position: relative;
       width: 90px;
@@ -255,37 +544,13 @@
       animation: floatBob 2.5s ease-in-out infinite alternate;
     }
 
-    @keyframes spinRing {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes pulseGlow { 0% { transform: scale(0.9); opacity: 0.5; } 100% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 12px rgba(5, 150, 105, 0.6)); } }
+    @keyframes floatBob { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(-5px) scale(1.04); } }
 
-    @keyframes pulseGlow {
-      0% { transform: scale(0.9); opacity: 0.5; }
-      100% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 12px rgba(5, 150, 105, 0.6)); }
-    }
-
-    @keyframes floatBob {
-      0% { transform: translateY(0px) scale(1); }
-      100% { transform: translateY(-5px) scale(1.04); }
-    }
-
-    .loading-title {
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.3px;
-      margin-bottom: 6px;
-      font-size: 18px;
-    }
-
-    .loading-desc {
-      color: #64748b;
-      font-size: 13px;
-      max-width: 380px;
-      margin: 0 auto 18px auto;
-      line-height: 1.5;
-    }
-
+    .loading-title { font-weight: 800; color: #0f172a; margin-bottom: 6px; font-size: 19px; }
+    .loading-desc { color: #64748b; font-size: 13px; max-width: 400px; margin: 0 auto 18px auto; line-height: 1.5; }
+    
     .loading-step-badge {
       display: inline-flex;
       align-items: center;
@@ -301,21 +566,16 @@
     }
 
     .pulse-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #059669;
+      width: 7px; height: 7px; border-radius: 50%; background: #059669;
       box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7);
       animation: dotPulse 1.4s infinite;
     }
-
     @keyframes dotPulse {
       0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7); }
       70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(5, 150, 105, 0); }
       100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
     }
 
-    /* Skeleton Placeholder for Selector */
     .skeleton-box {
       background: #f8fafc;
       border-radius: 14px;
@@ -325,312 +585,355 @@
       position: relative;
       overflow: hidden;
     }
-
     .skeleton-box::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -150%; width: 150%; height: 100%;
+      content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
       animation: shimmerWave 1.6s infinite;
     }
+    @keyframes shimmerWave { 0% { transform: translateX(0); } 100% { transform: translateX(200%); } }
 
-    @keyframes shimmerWave {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(200%); }
-    }
-
-    .skeleton-line {
-      height: 11px;
-      background: #e2e8f0;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    /* Animation Transitions */
-    .animate-fadeInUp {
-      animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .animate-fadeOut {
-      animation: fadeOut 0.35s ease-out forwards;
-    }
-
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.97);
-        display: none;
-      }
-    }
+    .animate-fadeInUp { animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-fadeOut { animation: fadeOut 0.32s ease-out forwards; }
+    @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.97); display: none; } }
   </style>
 </head>
 <body>
 
-  <!-- Top Hero Header -->
-  <div class="hero-header">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div class="d-flex align-items-center gap-2">
-        <span class="fs-4">🏆</span>
-        <div>
-          <h5 class="fw-bold mb-0 text-white">Ekskul Maisya</h5>
-          <small class="text-white-50" style="font-size: 11px;">Ponpes Imam Syafi'i Brebes</small>
-        </div>
+  <!-- Backdrop Mobile Drawer -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebarMobile()"></div>
+
+  <!-- ==========================================
+       SIDEBAR KIRI (PENGGANTI HEADER ATAS)
+       ========================================== -->
+  <aside class="app-sidebar" id="app-sidebar">
+    <!-- Brand Info -->
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">🏆</div>
+      <div>
+        <h6 class="fw-bold mb-0 text-white" style="letter-spacing: -0.2px;">Ekskul Maisya</h6>
+        <small class="text-white-50" style="font-size: 11px;">Ponpes Imam Syafi'i Brebes</small>
       </div>
-      <div class="d-flex align-items-center gap-2">
-        <button id="btn-install-pwa" class="btn btn-sm btn-warning py-0 px-2 rounded-pill fw-bold d-none text-dark shadow-sm" onclick="promptInstallPwa()" style="font-size: 11px;">
-          <i class="bi bi-download me-1"></i> Install
-        </button>
-        <span class="badge-role d-flex align-items-center gap-1">
-          <i class="bi bi-person-badge"></i> Pengampu
+    </div>
+
+    <!-- Profile Pengampu Aktif -->
+    <div class="sidebar-profile-card" id="sidebar-profile-box">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="badge bg-warning text-dark fw-bold" style="font-size: 10px;">
+          <i class="bi bi-shield-check me-1"></i>PENGAMPU
         </span>
-        <button class="btn btn-sm btn-outline-light py-0 px-2 rounded-pill" onclick="logoutPengampu()" title="Ganti Pengampu" style="font-size: 11px;">
+        <button class="btn btn-sm btn-outline-light py-0 px-2 rounded-pill" onclick="logoutPengampu()" title="Ganti Pengampu" style="font-size: 10.5px;">
           <i class="bi bi-box-arrow-right"></i> Ganti
         </button>
       </div>
-    </div>
-    <div class="mt-2 text-white-50 small font-arabic text-end" style="font-size: 13px;">
-      مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ
-    </div>
-  </div>
-
-  <div class="container" style="max-width: 720px;">
-
-    <!-- Card 0: Card Loading Animasi Keren (Muncul instan sejak awal sebelum data pengampu termuat) -->
-    <div class="loading-card mb-3" id="box-loading-init">
-      <div class="loader-orb-wrap">
-        <div class="loader-spinning-ring"></div>
-        <div class="loader-pulse-glow"></div>
-        <div class="loader-icon-core">
-          <i class="bi bi-trophy-fill text-warning"></i>
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 34px; height: 34px; font-size: 14px;" id="sidebar-avatar-initial">
+          U
+        </div>
+        <div class="overflow-hidden">
+          <div class="fw-bold text-white text-truncate" id="sidebar-nama-pengampu" style="font-size: 13.5px;">Belum Dipilih</div>
+          <small class="text-white-50 d-block text-truncate" style="font-size: 11px;" id="sidebar-cabang-summary">0 Cabang Kegiatan</small>
         </div>
       </div>
+    </div>
 
-      <h5 class="loading-title">Menyiapkan Portal Ekskul</h5>
-      <p class="loading-desc" id="loading-init-desc">Menghubungkan ke database dan memuat jadwal pengampu ekstrakurikuler Ponpes Imam Syafi'i Brebes...</p>
+    <!-- Navigasi Menu Sidebar -->
+    <div class="sidebar-nav">
+      <div class="sidebar-nav-title">Menu Utama</div>
+      
+      <button type="button" class="nav-item-btn active" id="nav-btn-input" onclick="switchMainTab('input')">
+        <i class="bi bi-table"></i>
+        <span>Presensi Leger &amp; Agenda</span>
+      </button>
 
-      <div class="loading-step-badge">
-        <span class="pulse-dot"></span>
-        <span id="loading-status-text">Memuat data pengampu ekskul...</span>
-      </div>
+      <button type="button" class="nav-item-btn" id="nav-btn-riwayat" onclick="switchMainTab('riwayat')">
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Riwayat Sesi Saya</span>
+      </button>
 
-      <!-- Skeleton Placeholder untuk Form Seleksi Pengampu -->
-      <div class="skeleton-box">
-        <div class="skeleton-line" style="width: 38%; height: 10px;"></div>
-        <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-white border">
-          <div class="d-flex align-items-center gap-2">
-            <div class="spinner-grow spinner-grow-sm text-success" role="status" style="width: 13px; height: 13px;"></div>
-            <span class="text-muted small fw-medium" id="skeleton-status-msg">Mengambil daftar ustadz &amp; cabang...</span>
-          </div>
-          <i class="bi bi-chevron-down text-muted small"></i>
-        </div>
-      </div>
-
-      <!-- Opsi Muat Ulang jika jaringan lambat -->
-      <div id="loading-retry-wrap" class="mt-3 d-none">
-        <p class="text-danger small mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Pemuatan membutuhkan waktu lebih lama.</p>
-        <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" onclick="fetchDaftarPengampu()">
-          <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang Sekarang
+      <!-- Tombol Install PWA -->
+      <div class="mt-3 px-1">
+        <button id="btn-install-pwa" class="btn btn-warning w-100 py-2 rounded-3 fw-bold d-none text-dark shadow-sm text-start d-flex align-items-center justify-content-between" onclick="promptInstallPwa()" style="font-size: 12px;">
+          <span><i class="bi bi-download me-2"></i>Install Aplikasi (PWA)</span>
+          <i class="bi bi-arrow-right-short fs-5"></i>
         </button>
       </div>
     </div>
 
-    <!-- Card 1: Seleksi Pengampu (Jika belum dipilih) -->
-    <div class="main-card mb-3" id="box-pilih-guru" style="display: none;">
-      <div class="text-center py-2">
-        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex p-3 mb-2 fs-2">
-          <i class="bi bi-person-check-fill"></i>
-        </div>
-        <h6 class="fw-bold mb-1">Identitas Pengampu Ekskul</h6>
-        <p class="text-muted small mb-3">Silakan pilih nama Ustadz / Guru pengampu untuk membuka agenda latihan.</p>
-        
-        <div class="text-start mb-3">
-          <label class="form-label">Nama Pengampu / Pembina</label>
-          <select class="form-select form-select-lg" id="select-pengampu" onchange="onPengampuSelected(this.value)">
-            <option value="">-- Pilih Nama Pengampu --</option>
-          </select>
-        </div>
+    <!-- Footer Hadits / Info -->
+    <div class="sidebar-footer">
+      <div class="text-white-50 font-arabic text-center mb-1" style="font-size: 13px;">
+        مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ
+      </div>
+      <div class="text-center text-white-50" style="font-size: 10px;">
+        Sistem Informasi Keasramaan &amp; Ekskul
       </div>
     </div>
+  </aside>
 
-    <!-- Area Konten Utama (Jika guru sudah terpilih) -->
-    <div id="box-konten-guru" style="display: none;">
+  <!-- ==========================================
+       MAIN CONTENT (KONTEN KANAN)
+       ========================================== -->
+  <main class="app-main">
+    
+    <!-- Topbar Navigasi -->
+    <header class="app-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Toggle Button untuk Mobile -->
+        <button class="btn btn-sm btn-light border d-lg-none" type="button" onclick="toggleSidebarMobile()">
+          <i class="bi bi-list fs-5"></i>
+        </button>
 
-      <!-- Navigasi Tab Mobile -->
-      <ul class="nav nav-pills nav-pills-custom justify-content-center bg-white p-1 rounded-4 shadow-sm mb-3 mt-n2 border" id="pwa-tabs">
-        <li class="nav-item">
-          <button class="nav-link active" id="tab-input-btn" onclick="switchPwaTab('input')">
-            <i class="bi bi-pencil-square me-1"></i>Isi Jurnal &amp; Absen
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="tab-riwayat-btn" onclick="switchPwaTab('riwayat')">
-            <i class="bi bi-clock-history me-1"></i>Riwayat Sesi Saya
-          </button>
-        </li>
-      </ul>
+        <div>
+          <h6 class="fw-bold mb-0 text-dark" id="topbar-page-title">Presensi Leger &amp; Agenda Latihan</h6>
+          <small class="text-muted" style="font-size: 11px;" id="topbar-breadcrumb">Ekstrakurikuler • Ponpes Imam Syafi'i Brebes</small>
+        </div>
+      </div>
 
-      <!-- TAB 1: FORM INPUT JURNAL & PRESENSI -->
-      <div id="view-tab-input">
-        
-        <!-- Info Bar Pengampu Aktif -->
-        <div class="card border-0 shadow-sm rounded-4 mb-3 p-3 bg-white">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <small class="text-muted text-uppercase fw-bold" style="font-size: 10px;">Pengampu Terpilih</small>
-              <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                <i class="bi bi-person-circle text-success"></i> <span id="label-pengampu-aktif">-</span>
-              </h6>
-            </div>
-            <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2 py-1" id="badge-total-cabang">
-              0 Cabang Ekskul
-            </span>
+      <div class="d-flex align-items-center gap-2">
+        <div class="badge bg-light text-dark border px-2 py-1.5 d-none d-sm-flex align-items-center gap-1.5" style="font-size: 12px;">
+          <i class="bi bi-calendar3 text-success"></i>
+          <span id="topbar-live-date">...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Body -->
+    <div class="content-body">
+
+      <!-- ==========================================
+           CARD 0: LOADING ANIMASI AWAL
+           ========================================== -->
+      <div class="loading-card" id="box-loading-init">
+        <div class="loader-orb-wrap">
+          <div class="loader-spinning-ring"></div>
+          <div class="loader-pulse-glow"></div>
+          <div class="loader-icon-core">
+            <i class="bi bi-trophy-fill text-warning"></i>
           </div>
         </div>
 
-        <!-- Form Agenda Latihan & Sesi -->
-        <div class="card border-0 shadow-sm rounded-4 mb-3 bg-white p-3">
-          <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-            <i class="bi bi-journal-bookmark-fill text-warning fs-5"></i>
-            <h6 class="fw-bold text-dark mb-0">Agenda Sesi Latihan</h6>
-          </div>
+        <h5 class="loading-title">Menyiapkan Portal Ekskul</h5>
+        <p class="loading-desc" id="loading-init-desc">Menghubungkan ke database dan memuat jadwal pengampu ekstrakurikuler Ponpes Imam Syafi'i Brebes...</p>
 
-          <div class="row g-2 mb-3">
-            <div class="col-12 col-md-7">
-              <label class="form-label">Cabang Ekskul</label>
-              <select class="form-select" id="input-cabang-ekskul" onchange="onCabangSelected(this.value)">
-                <option value="">-- Pilih Cabang Ekskul --</option>
-              </select>
-            </div>
-            <div class="col-12 col-md-5">
-              <label class="form-label">Tanggal Latihan</label>
-              <input type="date" class="form-control" id="input-tanggal" onchange="onTanggalChanged()">
-            </div>
-          </div>
-
-          <div class="row g-2 mb-3">
-            <div class="col-6">
-              <label class="form-label">Jam Mulai</label>
-              <input type="time" class="form-control" id="input-jam-mulai" value="16:00">
-            </div>
-            <div class="col-6">
-              <label class="form-label">Jam Selesai</label>
-              <input type="time" class="form-control" id="input-jam-selesai" value="17:15">
-            </div>
-          </div>
-
-          <!-- MATERI WAJIB DIISI -->
-          <div class="mb-3">
-            <label class="form-label d-flex justify-content-between">
-              <span>Materi / Kegiatan yang Diajarkan <span class="text-danger">*</span></span>
-              <span class="text-muted fw-normal" style="font-size: 11px;">Wajib diisi pengampu</span>
-            </label>
-            <textarea class="form-control" id="input-materi" rows="3" placeholder="Tuliskan materi/teknik latihan hari ini secara jelas... (Contoh: Penguasaan teknik passing dada, positioning pertahanan, dan latihan tanding internal 15 menit)"></textarea>
-          </div>
-
-          <!-- CATATAN KENDALA / KEJADIAN -->
-          <div class="mb-2">
-            <label class="form-label d-flex justify-content-between">
-              <span>Catatan Kendala / Kejadian Selama Sesi</span>
-              <span class="text-muted fw-normal" style="font-size: 11px;">Opsional / bila ada</span>
-            </label>
-            <textarea class="form-control" id="input-kendala" rows="2" placeholder="Tuliskan jika ada kendala/kejadian... (Contoh: Lapangan sedikit basah karena hujan gerimis; Santri Fulan cedera ringan engkel terkilir dan dirujuk ke UKS; Bola futsal kurang 1)"></textarea>
-          </div>
+        <div class="loading-step-badge">
+          <span class="pulse-dot"></span>
+          <span id="loading-status-text">Memuat data pengampu ekskul...</span>
         </div>
 
-        <!-- Presensi & Penilaian Santri Peserta -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white p-3">
-          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
+        <!-- Skeleton Placeholder untuk Form Seleksi Pengampu -->
+        <div class="skeleton-box">
+          <div style="height: 10px; width: 38%; background: #e2e8f0; border-radius: 6px; margin-bottom: 8px;"></div>
+          <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-white border">
             <div class="d-flex align-items-center gap-2">
-              <i class="bi bi-people-fill text-primary fs-5"></i>
-              <div>
-                <h6 class="fw-bold text-dark mb-0">Presensi &amp; Penilaian Peserta</h6>
-                <small class="text-muted" id="label-santri-count">0 Santri Terdaftar</small>
+              <div class="spinner-grow spinner-grow-sm text-success" role="status" style="width: 13px; height: 13px;"></div>
+              <span class="text-muted small fw-medium" id="skeleton-status-msg">Mengambil daftar ustadz &amp; cabang...</span>
+            </div>
+            <i class="bi bi-chevron-down text-muted small"></i>
+          </div>
+        </div>
+
+        <div id="loading-retry-wrap" class="mt-3 d-none">
+          <p class="text-danger small mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Pemuatan membutuhkan waktu lebih lama.</p>
+          <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" onclick="fetchDaftarPengampu()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang Sekarang
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           CARD 1: SELEKSI NAMA PENGAMPU (JIKA BELUM PILIH)
+           ========================================== -->
+      <div class="card-modern" id="box-pilih-guru" style="display: none; max-width: 600px; margin: 30px auto;">
+        <div class="text-center py-3">
+          <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex p-3 mb-3 fs-2 shadow-xs">
+            <i class="bi bi-person-check-fill"></i>
+          </div>
+          <h5 class="fw-bold mb-1">Identitas Pengampu Ekskul</h5>
+          <p class="text-muted small mb-4">Silakan pilih nama Ustadz / Pembina untuk membuka agenda dan buku leger presensi santri.</p>
+          
+          <div class="text-start mb-3">
+            <label class="form-label-custom">Pilih Nama Pengampu / Pembina</label>
+            <select class="form-select form-select-lg form-select-custom fw-semibold" id="select-pengampu" onchange="onPengampuSelected(this.value)">
+              <option value="">-- Pilih Nama Pengampu --</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           AREA KONTEN UTAMA (SETELAH PENGAMPU TERPILIH)
+           ========================================== -->
+      <div id="box-konten-guru" style="display: none;">
+
+        <!-- TAB 1: AGENDA LATIHAN & PRESENSI LEGER -->
+        <div id="view-tab-input">
+
+          <!-- 1. Form Agenda & Sesi Pertemuan (Card Horizontal Ringkas) -->
+          <div class="card-modern p-3 p-md-4 mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-journal-text text-success fs-5"></i>
+                <h6 class="fw-bold text-dark mb-0">Agenda &amp; Materi Pertemuan</h6>
+              </div>
+              <span class="badge bg-light text-secondary border px-2 py-1" id="badge-cabang-count">0 Cabang</span>
+            </div>
+
+            <div class="row g-3">
+              <!-- Pilih Cabang Ekskul -->
+              <div class="col-md-6">
+                <label class="form-label-custom">
+                  <span>Cabang Kegiatan Ekskul</span>
+                  <span class="text-danger">*wajib</span>
+                </label>
+                <select class="form-select form-select-custom fw-bold text-dark" id="input-cabang-ekskul" onchange="onCabangSelected(this.value)">
+                  <option value="">-- Pilih Cabang Ekskul --</option>
+                </select>
+              </div>
+
+              <!-- Tanggal Pertemuan -->
+              <div class="col-md-3 col-6">
+                <label class="form-label-custom">Tanggal Latihan</label>
+                <input type="date" class="form-control form-control-custom fw-semibold" id="input-tanggal">
+              </div>
+
+              <!-- Jam Pelaksanaan -->
+              <div class="col-md-3 col-6">
+                <label class="form-label-custom">Jam (Mulai - Selesai)</label>
+                <div class="input-group input-group-sm">
+                  <input type="time" class="form-control form-control-custom text-center p-1" id="input-jam-mulai" value="16:00">
+                  <span class="input-group-text bg-light">-</span>
+                  <input type="time" class="form-control form-control-custom text-center p-1" id="input-jam-selesai" value="17:30">
+                </div>
+              </div>
+
+              <!-- Materi Latihan Wajib -->
+              <div class="col-md-12">
+                <label class="form-label-custom">
+                  <span>Materi / Agenda Latihan Hari Ini</span>
+                  <span class="text-success fw-normal" style="font-size: 11px;">Wajib diisi pengampu</span>
+                </label>
+                <textarea class="form-control form-control-custom" id="input-materi" rows="2" placeholder="Tuliskan materi/teknik latihan yang diajarkan hari ini... (Contoh: Penguasaan teknik passing, formasi pertahanan, dan simulasi tanding 15 menit)"></textarea>
+              </div>
+
+              <!-- Catatan Kendala / Kejadian Lapangan -->
+              <div class="col-md-12">
+                <label class="form-label-custom">
+                  <span>Catatan Kendala / Kejadian Khusus Lapangan</span>
+                  <span class="text-muted fw-normal" style="font-size: 11px;">Opsional / bila ada</span>
+                </label>
+                <input type="text" class="form-control form-control-custom" id="input-kendala" placeholder="Contoh: Lapangan sedikit basah gerimis; Santri Fulan cedera ringan engkel terkilir dan dirujuk ke UKS; Bola futsal kurang 1">
               </div>
             </div>
-            <div class="d-flex gap-1">
-              <button type="button" class="btn btn-sm btn-outline-success py-1 px-2 fw-semibold" onclick="setSemuaPresensi('Hadir')">
-                <i class="bi bi-check2-all"></i> Semua Hadir
+          </div>
+
+          <!-- 2. BUKU LEGER PRESENSI LANDSCAPE (MEMANJANG SECARA HORIZONTAL) -->
+          <div class="leger-card">
+            
+            <!-- Leger Header Controls -->
+            <div class="leger-header-bar">
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-3 bg-success bg-opacity-10 text-success p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                  <i class="bi bi-table fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold text-dark mb-0">Buku Leger Presensi &amp; Penilaian Santri</h6>
+                  <small class="text-muted" id="label-santri-count">0 Santri Terdaftar</small>
+                </div>
+              </div>
+
+              <!-- Live KPI Chips & Quick Actions -->
+              <div class="d-flex flex-wrap align-items-center gap-2">
+                <span class="kpi-chip kpi-chip-h" id="bar-hadir-count"><i class="bi bi-check-circle-fill"></i> H: 0</span>
+                <span class="kpi-chip kpi-chip-i" id="bar-izin-count"><i class="bi bi-clock-fill"></i> I: 0</span>
+                <span class="kpi-chip kpi-chip-s" id="bar-sakit-count"><i class="bi bi-heart-pulse-fill"></i> S: 0</span>
+                <span class="kpi-chip kpi-chip-a" id="bar-alfa-count"><i class="bi bi-x-circle-fill"></i> A: 0</span>
+
+                <button type="button" class="btn btn-sm btn-outline-success fw-bold py-1 px-3 rounded-pill ms-1" onclick="setSemuaPresensi('Hadir')">
+                  <i class="bi bi-check2-all me-1"></i> Semua Hadir
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Pencarian Cepat Santri -->
+            <div class="px-3 py-2 bg-light border-bottom">
+              <div class="input-group input-group-sm" style="max-width: 360px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0 bg-white" id="search-santri-pwa" placeholder="Cari nama atau NIS santri..." oninput="filterSantriListPwa(this.value)">
+              </div>
+            </div>
+
+            <!-- Tabel Leger Horizontal -->
+            <div class="leger-table-wrap">
+              <table class="table-leger">
+                <thead>
+                  <tr>
+                    <th style="width: 45px; text-align: center;">No</th>
+                    <th style="width: 105px;">NIS</th>
+                    <th style="min-width: 220px;">Nama Santri</th>
+                    <th style="width: 85px; text-align: center;">Kelas</th>
+                    <th style="width: 190px; text-align: center;">Status Kehadiran</th>
+                    <th style="width: 125px; text-align: center;">Nilai Mutu</th>
+                    <th style="min-width: 200px;">Catatan Perkembangan</th>
+                  </tr>
+                </thead>
+                <tbody id="leger-tbody-santri">
+                  <tr>
+                    <td colspan="7" class="text-center py-5 text-muted">
+                      <i class="bi bi-arrow-up-circle fs-3 text-secondary d-block mb-2"></i>
+                      Silakan pilih cabang kegiatan ekskul di atas untuk memuat buku leger santri.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- TAB 2: RIWAYAT SESI SAYA -->
+        <div id="view-tab-riwayat" style="display: none;">
+          <div class="card-modern">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-calendar2-check text-success fs-5"></i>
+                <h6 class="fw-bold text-dark mb-0">Riwayat Jurnal &amp; Sesi Saya</h6>
+              </div>
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="loadDataPengampu(activePengampu)">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh
               </button>
             </div>
-          </div>
 
-          <!-- Pencarian Cepat Santri -->
-          <div class="mb-3">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
-              <input type="text" class="form-control border-start-0" id="search-santri-pwa" placeholder="Cari nama atau NIS santri..." oninput="filterSantriListPwa(this.value)">
-            </div>
-          </div>
-
-          <!-- Container Daftar Santri -->
-          <div id="list-santri-container">
-            <div class="text-center py-4 text-muted">
-              <i class="bi bi-arrow-up-circle fs-3 text-secondary d-block mb-1"></i>
-              Pilih cabang ekskul di atas untuk memuat daftar santri.
+            <div id="riwayat-container">
+              <div class="text-center py-5 text-muted">
+                <div class="spinner-border spinner-border-sm text-primary me-2"></div>Memuat riwayat sesi...
+              </div>
             </div>
           </div>
         </div>
 
-      </div>
-
-      <!-- TAB 2: RIWAYAT SESI MENGAJAR SAYA -->
-      <div id="view-tab-riwayat" style="display: none;">
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white p-3">
-          <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-            <div class="d-flex align-items-center gap-2">
-              <i class="bi bi-calendar2-check text-success fs-5"></i>
-              <h6 class="fw-bold text-dark mb-0">Riwayat Jurnal &amp; Sesi Saya</h6>
-            </div>
-            <button class="btn btn-sm btn-outline-primary" onclick="loadDataPengampu(activePengampu)">
-              <i class="bi bi-arrow-clockwise"></i> Refresh
-            </button>
-          </div>
-
-          <div id="riwayat-container">
-            <div class="text-center py-4 text-muted">
-              <div class="spinner-border spinner-border-sm text-primary me-2"></div>Memuat riwayat sesi...
-            </div>
-          </div>
-        </div>
       </div>
 
     </div>
 
-  </div>
-
-  <!-- Floating Bottom Save Bar -->
-  <div class="floating-save-bar" id="bottom-save-bar" style="display: none;">
-    <div class="container d-flex justify-content-between align-items-center p-0" style="max-width: 720px;">
-      <div>
-        <small class="text-muted d-block" style="font-size: 11px;">Status Kehadiran Santri</small>
-        <div class="d-flex gap-2">
-          <span class="stat-badge bg-success text-white" id="bar-hadir-count">Hadir: 0</span>
-          <span class="stat-badge bg-warning text-dark" id="bar-izin-count">Izin: 0</span>
-          <span class="stat-badge bg-danger text-white" id="bar-alfa-count">Alfa/Sakit: 0</span>
-        </div>
+    <!-- Floating Bottom Save Bar -->
+    <div class="floating-save-bar" id="bottom-save-bar" style="display: none;">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-info-circle-fill text-success"></i>
+        <span class="small text-muted d-none d-sm-inline">Pastikan seluruh materi latihan dan presensi leger telah sesuai.</span>
       </div>
       <button type="button" class="btn btn-save-jurnal d-flex align-items-center gap-2" id="btn-submit-jurnal" onclick="submitJurnalDanPresensi()">
         <i class="bi bi-cloud-arrow-up-fill fs-5"></i>
-        <span>Simpan Sesi</span>
+        <span>Simpan Sesi &amp; Presensi Leger</span>
       </button>
     </div>
-  </div>
 
+  </main>
+
+  <!-- ==========================================
+       JAVASCRIPT LOGIC ENGINE
+       ========================================== -->
   <script>
     // Konfigurasi Endpoint Backend GAS
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwELxlXYsX7G_o4A25hi_5bd7dsEO3wIdFJXxmIWV4393O7CiRXyA19tDEFTuYrtmQb/exec";
@@ -674,7 +977,6 @@
 
     // ==========================================
     // RESILIENT API CLIENT FOR GITHUB PAGES
-    // Mendukung fetch langsung & fallback JSONP otomatis bebas CORS block
     // ==========================================
     function gasApiGet(apiName, extraParams) {
       let url = GAS_API_URL + '?api=' + encodeURIComponent(apiName);
@@ -728,7 +1030,6 @@
 
     function gasApiPost(apiName, payload) {
       const url = GAS_API_URL + '?api=' + encodeURIComponent(apiName);
-      // PENTING: Gunakan text/plain agar browser TIDAK mengirimkan request OPTIONS preflight ke Google Apps Script
       return fetch(url, {
         method: 'POST',
         headers: {
@@ -750,8 +1051,13 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       // Inisialisasi tanggal default hari ini
-      const today = new Date().toISOString().split('T')[0];
+      const d = new Date();
+      const today = d.toISOString().split('T')[0];
       document.getElementById('input-tanggal').value = today;
+
+      // Format live date topbar
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('topbar-live-date').innerText = d.toLocaleDateString('id-ID', options);
 
       // Cek apakah ada pengampu tersimpan di localStorage atau URL parameter
       const urlParams = new URLSearchParams(window.location.search);
@@ -764,7 +1070,15 @@
       fetchDaftarPengampu(targetGuru);
     });
 
-    // Helper Transisi Halus dari Loading ke Konten Pilihan Guru
+    // Toggle Sidebar Mobile
+    function toggleSidebarMobile() {
+      const sidebar = document.getElementById('app-sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (sidebar) sidebar.classList.toggle('show');
+      if (backdrop) backdrop.classList.toggle('show');
+    }
+
+    // Helper Transisi Halus dari Loading ke Konten
     function transitionFromLoading(targetBoxId) {
       const boxLoading = document.getElementById('box-loading-init');
       const boxTarget = document.getElementById(targetBoxId);
@@ -785,7 +1099,7 @@
       }
     }
 
-    // 1. Fetch Daftar Pengampu dengan Dynamic Shimmer & Loading Animation
+    // 1. Fetch Daftar Pengampu dengan Loading Animation Keren
     let loadingInterval = null;
 
     function startLoadingAnimation() {
@@ -802,7 +1116,7 @@
       const steps = [
         { status: "Menghubungkan ke server cloud...", desc: "Memverifikasi integrasi aman dengan Core Portal Kesantrian...", skeleton: "Sinkronisasi server..." },
         { status: "Mengambil data pengampu ekskul...", desc: "Memuat daftar ustadz, pembina, serta cabang kegiatan ekstrakurikuler...", skeleton: "Memuat ustadz & pembina..." },
-        { status: "Menyiapkan form agenda & presensi...", desc: "Hampir selesai! Mengatur hak akses dan formulir materi santri...", skeleton: "Menyiapkan formulir..." }
+        { status: "Menyiapkan form agenda & presensi leger...", desc: "Hampir selesai! Mengatur hak akses dan formulir materi santri...", skeleton: "Menyiapkan buku leger..." }
       ];
 
       let stepIdx = 0;
@@ -837,29 +1151,26 @@
               sel.appendChild(opt);
             });
 
-            // Beri jeda 400ms agar user dapat menikmati loading animation yang halus
             setTimeout(() => {
               if (autoSelectName) {
                 const found = res.data.some(p => p.nama.toLowerCase() === autoSelectName.toLowerCase());
                 if (found) {
                   sel.value = autoSelectName;
                   transitionFromLoading('box-konten-guru');
-                  document.getElementById('label-pengampu-aktif').innerText = autoSelectName;
-                  document.getElementById('bottom-save-bar').style.display = 'block';
+                  setSidebarProfile(autoSelectName);
+                  document.getElementById('bottom-save-bar').style.display = 'flex';
                   loadDataPengampu(autoSelectName);
                   return;
                 }
               }
 
-              // Munculkan pilihan nama guru dengan transisi fadeInUp yang keren
-              transitionFromLoading('box-pilih-guru');
-            }, 450);
-
-          } else {
-            // Data kosong atau respon tidak sesuai
-            setTimeout(() => {
               transitionFromLoading('box-pilih-guru');
             }, 400);
+
+          } else {
+            setTimeout(() => {
+              transitionFromLoading('box-pilih-guru');
+            }, 350);
           }
         })
         .catch(err => {
@@ -872,17 +1183,27 @@
         });
     }
 
+    // Set Info Profil Pengampu di Sidebar
+    function setSidebarProfile(nama, cabangCount) {
+      document.getElementById('sidebar-nama-pengampu').innerText = nama;
+      const initial = nama.trim().charAt(0).toUpperCase() || 'U';
+      document.getElementById('sidebar-avatar-initial').innerText = initial;
+      if (cabangCount !== undefined) {
+        document.getElementById('sidebar-cabang-summary').innerText = cabangCount + ' Cabang Kegiatan';
+      }
+    }
+
     // 2. Event saat Pengampu Dipilih
     function onPengampuSelected(nama) {
       if (!nama) return;
       activePengampu = nama;
       localStorage.setItem('maisya_guru_ekskul_selected', nama);
 
-      document.getElementById('label-pengampu-aktif').innerText = nama;
+      setSidebarProfile(nama);
       document.getElementById('box-pilih-guru').style.display = 'none';
       document.getElementById('box-konten-guru').style.display = 'block';
       document.getElementById('box-konten-guru').classList.add('animate-fadeInUp');
-      document.getElementById('bottom-save-bar').style.display = 'block';
+      document.getElementById('bottom-save-bar').style.display = 'flex';
 
       loadDataPengampu(nama);
     }
@@ -902,11 +1223,18 @@
         if (result.isConfirmed) {
           localStorage.removeItem('maisya_guru_ekskul_selected');
           activePengampu = '';
+          setSidebarProfile('Belum Dipilih', 0);
           document.getElementById('box-pilih-guru').style.display = 'block';
           document.getElementById('box-pilih-guru').classList.add('animate-fadeInUp');
           document.getElementById('box-konten-guru').style.display = 'none';
           document.getElementById('bottom-save-bar').style.display = 'none';
           document.getElementById('select-pengampu').value = '';
+          
+          // Tutup drawer di mobile jika terbuka
+          const sidebar = document.getElementById('app-sidebar');
+          const backdrop = document.getElementById('sidebar-backdrop');
+          if (sidebar) sidebar.classList.remove('show');
+          if (backdrop) backdrop.classList.remove('show');
         }
       });
     }
@@ -915,7 +1243,7 @@
     function loadDataPengampu(nama) {
       Swal.fire({
         title: 'Memuat Data...',
-        text: 'Mengambil jadwal dan peserta ekskul ' + nama,
+        text: 'Mengambil jadwal dan buku leger ekskul ' + nama,
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
@@ -927,7 +1255,8 @@
             masterCabang = res.cabangList || [];
             riwayatList = res.riwayatJurnal || [];
 
-            document.getElementById('badge-total-cabang').innerText = masterCabang.length + ' Cabang Ekskul';
+            setSidebarProfile(nama, masterCabang.length);
+            document.getElementById('badge-cabang-count').innerText = masterCabang.length + ' Cabang Ekskul';
 
             const selCabang = document.getElementById('input-cabang-ekskul');
             selCabang.innerHTML = '<option value="">-- Pilih Cabang Ekskul --</option>';
@@ -943,11 +1272,13 @@
               selCabang.value = masterCabang[0].id;
               onCabangSelected(masterCabang[0].id);
             } else {
-              document.getElementById('list-santri-container').innerHTML = `
-                <div class="text-center py-4 text-muted">
-                  <i class="bi bi-arrow-up-circle fs-3 text-secondary d-block mb-1"></i>
-                  Silakan pilih salah satu cabang ekskul yang sedang Ustadz ampu.
-                </div>
+              document.getElementById('leger-tbody-santri').innerHTML = `
+                <tr>
+                  <td colspan="7" class="text-center py-5 text-muted">
+                    <i class="bi bi-arrow-up-circle fs-3 text-secondary d-block mb-2"></i>
+                    Silakan pilih salah satu cabang ekskul di atas untuk memuat buku leger santri.
+                  </td>
+                </tr>
               `;
             }
 
@@ -966,8 +1297,10 @@
     function onCabangSelected(cabangId) {
       activeCabangId = cabangId;
       if (!cabangId) {
-        document.getElementById('list-santri-container').innerHTML = `
-          <div class="text-center py-4 text-muted">Pilih cabang ekskul di atas.</div>
+        document.getElementById('leger-tbody-santri').innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">Silakan pilih cabang ekskul di atas.</td>
+          </tr>
         `;
         document.getElementById('label-santri-count').innerText = '0 Santri';
         updateStatusBar();
@@ -987,71 +1320,68 @@
         catatan: ''
       }));
 
-      document.getElementById('label-santri-count').innerText = currentPesertaList.length + ' Santri Terdaftar';
-      renderSantriList(currentPesertaList);
+      document.getElementById('label-santri-count').innerText = currentPesertaList.length + ' Santri Terdaftar di Cabang Ini';
+      renderSantriLeger(currentPesertaList);
       updateStatusBar();
     }
 
-    // 6. Render Daftar Santri
-    function renderSantriList(list) {
-      const container = document.getElementById('list-santri-container');
+    // 6. RENDER DAFTAR SANTRI BENTUK ABSEN LEGER LANDSCAPE (MEMANJANG HORIZONTAL)
+    function renderSantriLeger(list) {
+      const tbody = document.getElementById('leger-tbody-santri');
       if (!list || list.length === 0) {
-        container.innerHTML = `<div class="text-center py-4 text-muted">Belum ada santri terdaftar di cabang ekskul ini.</div>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted">Belum ada santri terdaftar di cabang ekskul ini.</td></tr>`;
         return;
       }
 
       let html = '';
       list.forEach((s, idx) => {
-        const hActive = s.kehadiran === 'Hadir' ? 'btn-success text-white' : 'btn-outline-success';
-        const iActive = s.kehadiran === 'Izin' ? 'btn-warning text-dark' : 'btn-outline-warning';
-        const sActive = s.kehadiran === 'Sakit' ? 'btn-info text-white' : 'btn-outline-info';
-        const aActive = s.kehadiran === 'Alfa' ? 'btn-danger text-white' : 'btn-outline-danger';
+        const isH = s.kehadiran === 'Hadir';
+        const isI = s.kehadiran === 'Izin';
+        const isS = s.kehadiran === 'Sakit';
+        const isA = s.kehadiran === 'Alfa';
 
         html += `
-          <div class="santri-row" id="row-santri-${s.idSantri}" data-nama="${s.nama.toLowerCase()}" data-nis="${s.nis}">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <div>
-                <span class="badge bg-light text-secondary border me-1">${idx + 1}</span>
-                <strong class="text-dark">${s.nama}</strong>
-                <div class="text-muted" style="font-size: 11px;">NIS: ${s.nis} | Kelas: ${s.kelas}</div>
+          <tr class="leger-santri-row" id="row-leger-${s.idSantri}" data-nama="${s.nama.toLowerCase()}" data-nis="${s.nis}">
+            <td class="text-center text-muted fw-bold">${idx + 1}</td>
+            <td><code class="text-secondary fw-semibold">${s.nis}</code></td>
+            <td>
+              <div class="fw-bold text-dark">${s.nama}</div>
+            </td>
+            <td class="text-center">
+              <span class="badge bg-light text-secondary border">${s.kelas || '-'}</span>
+            </td>
+            <td class="text-center">
+              <div class="presensi-pill-group" role="group">
+                <button type="button" class="presensi-btn-pill ${isH ? 'active-h' : ''}" onclick="setSantriStatus('${s.idSantri}', 'Hadir')" title="Hadir">H</button>
+                <button type="button" class="presensi-btn-pill ${isI ? 'active-i' : ''}" onclick="setSantriStatus('${s.idSantri}', 'Izin')" title="Izin">I</button>
+                <button type="button" class="presensi-btn-pill ${isS ? 'active-s' : ''}" onclick="setSantriStatus('${s.idSantri}', 'Sakit')" title="Sakit">S</button>
+                <button type="button" class="presensi-btn-pill ${isA ? 'active-a' : ''}" onclick="setSantriStatus('${s.idSantri}', 'Alfa')" title="Alfa">A</button>
               </div>
-            </div>
-
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2 pt-2 border-top">
-              <div class="btn-group status-btn-group" role="group">
-                <button type="button" class="btn btn-sm ${hActive}" onclick="setSantriStatus('${s.idSantri}', 'Hadir')">Hadir</button>
-                <button type="button" class="btn btn-sm ${iActive}" onclick="setSantriStatus('${s.idSantri}', 'Izin')">Izin</button>
-                <button type="button" class="btn btn-sm ${sActive}" onclick="setSantriStatus('${s.idSantri}', 'Sakit')">Sakit</button>
-                <button type="button" class="btn btn-sm ${aActive}" onclick="setSantriStatus('${s.idSantri}', 'Alfa')">Alfa</button>
-              </div>
-
-              <div class="d-flex align-items-center gap-1">
-                <label class="small text-muted mb-0 fw-semibold" style="font-size: 11px;">Nilai:</label>
-                <select class="form-select form-select-sm text-center fw-bold" style="width: 105px;" onchange="setSantriNilai('${s.idSantri}', this.value)">
-                  <option value="" ${!s.nilai ? 'selected' : ''}>- Nilai -</option>
-                  <option value="A" ${s.nilai === 'A' ? 'selected' : ''}>A (Sangat Baik)</option>
-                  <option value="B" ${s.nilai === 'B' ? 'selected' : ''}>B (Baik)</option>
-                  <option value="C" ${s.nilai === 'C' ? 'selected' : ''}>C (Cukup)</option>
-                  <option value="D" ${s.nilai === 'D' ? 'selected' : ''}>D (Bimbingan)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="mt-2">
-              <input type="text" class="form-control form-control-sm" placeholder="Catatan perkembangan santri (opsional)..." value="${s.catatan || ''}" onchange="setSantriCatatan('${s.idSantri}', this.value)" style="font-size: 12px;">
-            </div>
-          </div>
+            </td>
+            <td class="text-center">
+              <select class="select-predikat-leger" onchange="setSantriNilai('${s.idSantri}', this.value)">
+                <option value="" ${!s.nilai ? 'selected' : ''}>- Nilai -</option>
+                <option value="A" ${s.nilai === 'A' ? 'selected' : ''}>A (Sangat Baik)</option>
+                <option value="B" ${s.nilai === 'B' ? 'selected' : ''}>B (Baik)</option>
+                <option value="C" ${s.nilai === 'C' ? 'selected' : ''}>C (Cukup)</option>
+                <option value="D" ${s.nilai === 'D' ? 'selected' : ''}>D (Bimbingan)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" class="input-catatan-leger" placeholder="Tulis catatan santri jika ada..." value="${s.catatan || ''}" onchange="setSantriCatatan('${s.idSantri}', this.value)">
+            </td>
+          </tr>
         `;
       });
 
-      container.innerHTML = html;
+      tbody.innerHTML = html;
     }
 
     function setSantriStatus(idSantri, status) {
       const s = currentPesertaList.find(x => x.idSantri === idSantri);
       if (s) {
         s.kehadiran = status;
-        renderSantriList(currentPesertaList);
+        renderSantriLeger(currentPesertaList);
         updateStatusBar();
       }
     }
@@ -1068,41 +1398,43 @@
 
     function setSemuaPresensi(status) {
       currentPesertaList.forEach(s => s.kehadiran = status);
-      renderSantriList(currentPesertaList);
+      renderSantriLeger(currentPesertaList);
       updateStatusBar();
     }
 
     function updateStatusBar() {
-      let h = 0, i = 0, a = 0;
-      currentPesertaList.forEach(s => {
-        const st = (s.kehadiran || '').toLowerCase();
+      let h = 0, i = 0, s = 0, a = 0;
+      currentPesertaList.forEach(item => {
+        const st = (item.kehadiran || '').toLowerCase();
         if (st === 'hadir') h++;
         else if (st === 'izin') i++;
+        else if (st === 'sakit') s++;
         else a++;
       });
-      document.getElementById('bar-hadir-count').innerText = 'Hadir: ' + h;
-      document.getElementById('bar-izin-count').innerText = 'Izin: ' + i;
-      document.getElementById('bar-alfa-count').innerText = 'Alfa/Sakit: ' + a;
+      document.getElementById('bar-hadir-count').innerHTML = `<i class="bi bi-check-circle-fill"></i> H: ${h}`;
+      document.getElementById('bar-izin-count').innerHTML = `<i class="bi bi-clock-fill"></i> I: ${i}`;
+      document.getElementById('bar-sakit-count').innerHTML = `<i class="bi bi-heart-pulse-fill"></i> S: ${s}`;
+      document.getElementById('bar-alfa-count').innerHTML = `<i class="bi bi-x-circle-fill"></i> A: ${a}`;
     }
 
     function filterSantriListPwa(query) {
       const q = (query || '').toLowerCase().trim();
-      const rows = document.querySelectorAll('.santri-row');
+      const rows = document.querySelectorAll('.leger-santri-row');
       rows.forEach(r => {
         const nama = r.getAttribute('data-nama') || '';
         const nis = r.getAttribute('data-nis') || '';
         if (!q || nama.indexOf(q) !== -1 || nis.indexOf(q) !== -1) {
-          r.style.display = 'block';
+          r.style.display = '';
         } else {
           r.style.display = 'none';
         }
       });
     }
 
-    // 7. Submit Jurnal & Presensi
+    // 7. Submit Jurnal & Presensi Leger
     function submitJurnalDanPresensi() {
       if (!activeCabangId) {
-        Swal.fire('Peringatan', 'Silakan pilih cabang ekskul terlebih dahulu.', 'warning');
+        Swal.fire('Peringatan', 'Silakan pilih cabang kegiatan ekskul terlebih dahulu.', 'warning');
         return;
       }
 
@@ -1127,8 +1459,8 @@
       };
 
       Swal.fire({
-        title: 'Simpan Jurnal & Presensi?',
-        html: `Apakah Ustadz yakin ingin menyimpan agenda materi latihan dan presensi <b>${currentPesertaList.length} santri</b>?`,
+        title: 'Simpan Jurnal & Presensi Leger?',
+        html: `Apakah Ustadz yakin ingin menyimpan agenda materi latihan dan presensi leger <b>${currentPesertaList.length} santri</b>?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#065f46',
@@ -1150,12 +1482,12 @@
       gasApiPost('ekskul_save_jurnal_presensi', payload)
         .then(res => {
           btn.disabled = false;
-          btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi</span>`;
+          btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi &amp; Presensi Leger</span>`;
 
           if (res && res.success) {
             Swal.fire({
               title: 'Alhamdulillah!',
-              text: res.message || 'Jurnal materi dan presensi santri berhasil disimpan.',
+              text: res.message || 'Jurnal materi dan buku leger presensi santri berhasil disimpan.',
               icon: 'success',
               confirmButtonColor: '#065f46'
             });
@@ -1169,26 +1501,43 @@
         })
         .catch(e => {
           btn.disabled = false;
-          btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi</span>`;
+          btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi &amp; Presensi Leger</span>`;
           Swal.fire('Error', e.message, 'error');
         });
     }
 
-    // 8. Tab Switching
-    function switchPwaTab(tabName) {
+    // 8. Tab Switching (Sidebar Nav)
+    function switchMainTab(tabName) {
+      const btnInput = document.getElementById('nav-btn-input');
+      const btnRiwayat = document.getElementById('nav-btn-riwayat');
+      const viewInput = document.getElementById('view-tab-input');
+      const viewRiwayat = document.getElementById('view-tab-riwayat');
+      const bottomBar = document.getElementById('bottom-save-bar');
+      const pageTitle = document.getElementById('topbar-page-title');
+
       if (tabName === 'input') {
-        document.getElementById('view-tab-input').style.display = 'block';
-        document.getElementById('view-tab-riwayat').style.display = 'none';
-        document.getElementById('tab-input-btn').classList.add('active');
-        document.getElementById('tab-riwayat-btn').classList.remove('active');
-        document.getElementById('bottom-save-bar').style.display = 'block';
+        viewInput.style.display = 'block';
+        viewRiwayat.style.display = 'none';
+        btnInput.classList.add('active');
+        btnRiwayat.classList.remove('active');
+        if (activePengampu) bottomBar.style.display = 'flex';
+        pageTitle.innerText = 'Presensi Leger & Agenda Latihan';
       } else {
-        document.getElementById('view-tab-input').style.display = 'none';
-        document.getElementById('view-tab-riwayat').style.display = 'block';
-        document.getElementById('tab-input-btn').classList.remove('active');
-        document.getElementById('tab-riwayat-btn').classList.add('active');
-        document.getElementById('bottom-save-bar').style.display = 'none';
+        viewInput.style.display = 'none';
+        viewRiwayat.style.display = 'block';
+        btnInput.classList.remove('active');
+        btnRiwayat.classList.add('active');
+        bottomBar.style.display = 'none';
+        pageTitle.innerText = 'Riwayat Jurnal Sesi Mengajar';
         renderRiwayatList(riwayatList);
+      }
+
+      // Tutup drawer di layar mobile setelah klik menu
+      const sidebar = document.getElementById('app-sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (window.innerWidth < 992) {
+        if (sidebar) sidebar.classList.remove('show');
+        if (backdrop) backdrop.classList.remove('show');
       }
     }
 
@@ -1196,7 +1545,7 @@
     function renderRiwayatList(list) {
       const container = document.getElementById('riwayat-container');
       if (!list || list.length === 0) {
-        container.innerHTML = `<div class="text-center py-4 text-muted">Belum ada riwayat sesi mengajar yang tercatat.</div>`;
+        container.innerHTML = `<div class="text-center py-5 text-muted">Belum ada riwayat sesi mengajar yang tercatat.</div>`;
         return;
       }
 
