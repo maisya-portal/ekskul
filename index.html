@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ekskul Maisya - Jurnal & Presensi Pengampu</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#065f46">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ekskul Maisya">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="icon" type="image/png" href="./icon-192.png">
+
+  <!-- Bootstrap 5, Icons, Google Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    :root {
+      --primary: #065f46;
+      --primary-dark: #022c22;
+      --primary-light: #059669;
+      --accent: #f59e0b;
+      --bg-surface: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      padding-bottom: 90px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .font-arabic { font-family: 'Amiri', serif; }
+
+    .hero-header {
+      background: linear-gradient(145deg, var(--primary-dark), var(--primary), var(--primary-light));
+      color: #ffffff;
+      padding: 26px 20px 36px 20px;
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+      position: relative;
+      box-shadow: 0 10px 25px -5px rgba(6, 95, 70, 0.3);
+    }
+    .hero-header::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .badge-role {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .main-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      margin-top: -20px;
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .form-control, .form-select {
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-color);
+      padding: 10px 14px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    .santri-row {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+    }
+    .santri-row:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    }
+
+    .status-btn-group .btn {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .nav-pills-custom .nav-link {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 13px;
+      border-radius: 12px;
+      padding: 8px 16px;
+    }
+    .nav-pills-custom .nav-link.active {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .floating-save-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      padding: 12px 20px;
+      z-index: 1000;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-save-jurnal {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #ffffff;
+      font-weight: 700;
+      border-radius: 14px;
+      padding: 12px 24px;
+      border: none;
+      box-shadow: 0 4px 14px rgba(6, 95, 70, 0.35);
+      transition: all 0.2s;
+    }
+    .btn-save-jurnal:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(6, 95, 70, 0.45);
+      color: #ffffff;
+    }
+    .btn-save-jurnal:active { transform: translateY(1px); }
+
+    .stat-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Hero Header -->
+  <div class="hero-header">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="d-flex align-items-center gap-2">
+        <span class="fs-4">🏆</span>
+        <div>
+          <h5 class="fw-bold mb-0 text-white">Ekskul Maisya</h5>
+          <small class="text-white-50" style="font-size: 11px;">Ponpes Imam Syafi'i Brebes</small>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge-role d-flex align-items-center gap-1">
+          <i class="bi bi-person-badge"></i> Pengampu
+        </span>
+        <button class="btn btn-sm btn-outline-light py-0 px-2 rounded-pill" onclick="logoutPengampu()" title="Ganti Pengampu" style="font-size: 11px;">
+          <i class="bi bi-box-arrow-right"></i> Ganti
+        </button>
+      </div>
+    </div>
+    <div class="mt-2 text-white-50 small font-arabic text-end" style="font-size: 13px;">
+      مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ
+    </div>
+  </div>
+
+  <div class="container" style="max-width: 720px;">
+
+    <!-- Card 1: Seleksi Pengampu (Jika belum dipilih) -->
+    <div class="main-card mb-3" id="box-pilih-guru" style="display: none;">
+      <div class="text-center py-2">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex p-3 mb-2 fs-2">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Identitas Pengampu Ekskul</h6>
+        <p class="text-muted small mb-3">Silakan pilih nama Ustadz / Guru pengampu untuk membuka agenda latihan.</p>
+        
+        <div class="text-start mb-3">
+          <label class="form-label">Nama Pengampu / Pembina</label>
+          <select class="form-select form-select-lg" id="select-pengampu" onchange="onPengampuSelected(this.value)">
+            <option value="">-- Pilih Nama Pengampu --</option>
+          </select>
+        </div>
+        <div id="loading-pengampu" class="text-muted small py-2 d-none">
+          <div class="spinner-border spinner-border-sm text-primary me-2"></div>Memuat daftar pengampu...
+        </div>
+      </div>
+    </div>
+
+    <!-- Area Konten Utama (Jika guru sudah terpilih) -->
+    <div id="box-konten-guru" style="display: none;">
+
+      <!-- Navigasi Tab Mobile -->
+      <ul class="nav nav-pills nav-pills-custom justify-content-center bg-white p-1 rounded-4 shadow-sm mb-3 mt-n2 border" id="pwa-tabs">
+        <li class="nav-item">
+          <button class="nav-link active" id="tab-input-btn" onclick="switchPwaTab('input')">
+            <i class="bi bi-pencil-square me-1"></i>Isi Jurnal &amp; Absen
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-riwayat-btn" onclick="switchPwaTab('riwayat')">
+            <i class="bi bi-clock-history me-1"></i>Riwayat Sesi Saya
+          </button>
+        </li>
+      </ul>
+
+      <!-- TAB 1: FORM INPUT JURNAL & PRESENSI -->
+      <div id="view-tab-input">
+        
+        <!-- Info Bar Pengampu Aktif -->
+        <div class="card border-0 shadow-sm rounded-4 mb-3 p-3 bg-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <small class="text-muted text-uppercase fw-bold" style="font-size: 10px;">Pengampu Terpilih</small>
+              <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                <i class="bi bi-person-circle text-success"></i> <span id="label-pengampu-aktif">-</span>
+              </h6>
+            </div>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2 py-1" id="badge-total-cabang">
+              0 Cabang Ekskul
+            </span>
+          </div>
+        </div>
+
+        <!-- Form Agenda Latihan & Sesi -->
+        <div class="card border-0 shadow-sm rounded-4 mb-3 bg-white p-3">
+          <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+            <i class="bi bi-journal-bookmark-fill text-warning fs-5"></i>
+            <h6 class="fw-bold text-dark mb-0">Agenda Sesi Latihan</h6>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-12 col-md-7">
+              <label class="form-label">Cabang Ekskul</label>
+              <select class="form-select" id="input-cabang-ekskul" onchange="onCabangSelected(this.value)">
+                <option value="">-- Pilih Cabang Ekskul --</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-5">
+              <label class="form-label">Tanggal Latihan</label>
+              <input type="date" class="form-control" id="input-tanggal" onchange="onTanggalChanged()">
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label">Jam Mulai</label>
+              <input type="time" class="form-control" id="input-jam-mulai" value="16:00">
+            </div>
+            <div class="col-6">
+              <label class="form-label">Jam Selesai</label>
+              <input type="time" class="form-control" id="input-jam-selesai" value="17:15">
+            </div>
+          </div>
+
+          <!-- MATERI WAJIB DIISI -->
+          <div class="mb-3">
+            <label class="form-label d-flex justify-content-between">
+              <span>Materi / Kegiatan yang Diajarkan <span class="text-danger">*</span></span>
+              <span class="text-muted fw-normal" style="font-size: 11px;">Wajib diisi pengampu</span>
+            </label>
+            <textarea class="form-control" id="input-materi" rows="3" placeholder="Tuliskan materi/teknik latihan hari ini secara jelas... (Contoh: Penguasaan teknik passing dada, positioning pertahanan, dan latihan tanding internal 15 menit)"></textarea>
+          </div>
+
+          <!-- CATATAN KENDALA / KEJADIAN -->
+          <div class="mb-2">
+            <label class="form-label d-flex justify-content-between">
+              <span>Catatan Kendala / Kejadian Selama Sesi</span>
+              <span class="text-muted fw-normal" style="font-size: 11px;">Opsional / bila ada</span>
+            </label>
+            <textarea class="form-control" id="input-kendala" rows="2" placeholder="Tuliskan jika ada kendala/kejadian... (Contoh: Lapangan sedikit basah karena hujan gerimis; Santri Fulan cedera ringan engkel terkilir dan dirujuk ke UKS; Bola futsal kurang 1)"></textarea>
+          </div>
+        </div>
+
+        <!-- Presensi & Penilaian Santri Peserta -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white p-3">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-people-fill text-primary fs-5"></i>
+              <div>
+                <h6 class="fw-bold text-dark mb-0">Presensi &amp; Penilaian Peserta</h6>
+                <small class="text-muted" id="label-santri-count">0 Santri Terdaftar</small>
+              </div>
+            </div>
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-sm btn-outline-success py-1 px-2 fw-semibold" onclick="setSemuaPresensi('Hadir')">
+                <i class="bi bi-check2-all"></i> Semua Hadir
+              </button>
+            </div>
+          </div>
+
+          <!-- Pencarian Cepat Santri -->
+          <div class="mb-3">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control border-start-0" id="search-santri-pwa" placeholder="Cari nama atau NIS santri..." oninput="filterSantriListPwa(this.value)">
+            </div>
+          </div>
+
+          <!-- Container Daftar Santri -->
+          <div id="list-santri-container">
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-arrow-up-circle fs-3 text-secondary d-block mb-1"></i>
+              Pilih cabang ekskul di atas untuk memuat daftar santri.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: RIWAYAT SESI MENGAJAR SAYA -->
+      <div id="view-tab-riwayat" style="display: none;">
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-calendar2-check text-success fs-5"></i>
+              <h6 class="fw-bold text-dark mb-0">Riwayat Jurnal &amp; Sesi Saya</h6>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" onclick="loadDataPengampu(activePengampu)">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+          </div>
+
+          <div id="riwayat-container">
+            <div class="text-center py-4 text-muted">
+              <div class="spinner-border spinner-border-sm text-primary me-2"></div>Memuat riwayat sesi...
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Floating Bottom Save Bar -->
+  <div class="floating-save-bar" id="bottom-save-bar" style="display: none;">
+    <div class="container d-flex justify-content-between align-items-center p-0" style="max-width: 720px;">
+      <div>
+        <small class="text-muted d-block" style="font-size: 11px;">Status Kehadiran Santri</small>
+        <div class="d-flex gap-2">
+          <span class="stat-badge bg-success text-white" id="bar-hadir-count">Hadir: 0</span>
+          <span class="stat-badge bg-warning text-dark" id="bar-izin-count">Izin: 0</span>
+          <span class="stat-badge bg-danger text-white" id="bar-alfa-count">Alfa/Sakit: 0</span>
+        </div>
+      </div>
+      <button type="button" class="btn btn-save-jurnal d-flex align-items-center gap-2" id="btn-submit-jurnal" onclick="submitJurnalDanPresensi()">
+        <i class="bi bi-cloud-arrow-up-fill fs-5"></i>
+        <span>Simpan Sesi</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Konfigurasi Endpoint Backend GAS
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwELxlXYsX7G_o4A25hi_5bd7dsEO3wIdFJXxmIWV4393O7CiRXyA19tDEFTuYrtmQb/exec";
+
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.log('SW registration error: ', err);
+        });
+      });
+    }
+
+    // State App
+    let activePengampu = '';
+    let masterCabang = [];
+    let activeCabangId = '';
+    let currentPesertaList = [];
+    let riwayatList = [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Inisialisasi tanggal default hari ini
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('input-tanggal').value = today;
+
+      // Cek apakah ada pengampu tersimpan di localStorage atau URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlGuru = urlParams.get('guru') || urlParams.get('pengampu') || '';
+      const savedGuru = localStorage.getItem('maisya_guru_ekskul_selected') || '';
+
+      const targetGuru = urlGuru || savedGuru;
+
+      // Muat daftar pengampu dari backend
+      fetchDaftarPengampu(targetGuru);
+    });
+
+    // 1. Fetch Daftar Pengampu
+    function fetchDaftarPengampu(autoSelectName) {
+      document.getElementById('loading-pengampu').classList.remove('d-none');
+      
+      fetch(GAS_API_URL + '?api=ekskul_get_pengampu')
+        .then(r => r.json())
+        .then(res => {
+          document.getElementById('loading-pengampu').classList.add('d-none');
+          if (res && res.success && Array.isArray(res.data)) {
+            const sel = document.getElementById('select-pengampu');
+            sel.innerHTML = '<option value="">-- Pilih Nama Pengampu --</option>';
+            
+            res.data.forEach(p => {
+              const opt = document.createElement('option');
+              opt.value = p.nama;
+              opt.textContent = p.nama + (p.cabangList && p.cabangList.length ? ' (' + p.cabangList.join(', ') + ')' : '');
+              sel.appendChild(opt);
+            });
+
+            if (autoSelectName) {
+              const found = res.data.some(p => p.nama.toLowerCase() === autoSelectName.toLowerCase());
+              if (found) {
+                sel.value = autoSelectName;
+                onPengampuSelected(autoSelectName);
+                return;
+              }
+            }
+
+            document.getElementById('box-pilih-guru').style.display = 'block';
+            document.getElementById('box-konten-guru').style.display = 'none';
+            document.getElementById('bottom-save-bar').style.display = 'none';
+          } else {
+            document.getElementById('box-pilih-guru').style.display = 'block';
+          }
+        })
+        .catch(() => {
+          document.getElementById('loading-pengampu').classList.add('d-none');
+          document.getElementById('box-pilih-guru').style.display = 'block';
+        });
+    }
+
+    // 2. Event saat Pengampu Dipilih
+    function onPengampuSelected(nama) {
+      if (!nama) return;
+      activePengampu = nama;
+      localStorage.setItem('maisya_guru_ekskul_selected', nama);
+
+      document.getElementById('label-pengampu-aktif').innerText = nama;
+      document.getElementById('box-pilih-guru').style.display = 'none';
+      document.getElementById('box-konten-guru').style.display = 'block';
+      document.getElementById('bottom-save-bar').style.display = 'block';
+
+      loadDataPengampu(nama);
+    }
+
+    // 3. Logout / Ganti Pengampu
+    function logoutPengampu() {
+      Swal.fire({
+        title: 'Ganti Pengampu?',
+        text: 'Anda akan keluar dari sesi ' + activePengampu,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#065f46',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Ganti',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem('maisya_guru_ekskul_selected');
+          activePengampu = '';
+          document.getElementById('box-pilih-guru').style.display = 'block';
+          document.getElementById('box-konten-guru').style.display = 'none';
+          document.getElementById('bottom-save-bar').style.display = 'none';
+          document.getElementById('select-pengampu').value = '';
+        }
+      });
+    }
+
+    // 4. Load Data Ekskul Pengampu (Cabang & Riwayat)
+    function loadDataPengampu(nama) {
+      Swal.fire({
+        title: 'Memuat Data...',
+        text: 'Mengambil jadwal dan peserta ekskul ' + nama,
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+
+      fetch(GAS_API_URL + '?api=ekskul_get_public_data&pengampu=' + encodeURIComponent(nama))
+        .then(r => r.json())
+        .then(res => {
+          Swal.close();
+          if (res && res.success) {
+            masterCabang = res.cabangList || [];
+            riwayatList = res.riwayatJurnal || [];
+
+            document.getElementById('badge-total-cabang').innerText = masterCabang.length + ' Cabang Ekskul';
+
+            const selCabang = document.getElementById('input-cabang-ekskul');
+            selCabang.innerHTML = '<option value="">-- Pilih Cabang Ekskul --</option>';
+
+            masterCabang.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = c.id;
+              opt.textContent = c.nama + (c.jadwal ? ' (' + c.jadwal + ')' : '') + ' - ' + c.totalPeserta + ' Santri';
+              selCabang.appendChild(opt);
+            });
+
+            if (masterCabang.length === 1) {
+              selCabang.value = masterCabang[0].id;
+              onCabangSelected(masterCabang[0].id);
+            } else {
+              document.getElementById('list-santri-container').innerHTML = `
+                <div class="text-center py-4 text-muted">
+                  <i class="bi bi-arrow-up-circle fs-3 text-secondary d-block mb-1"></i>
+                  Silakan pilih salah satu cabang ekskul yang sedang Ustadz ampu.
+                </div>
+              `;
+            }
+
+            renderRiwayatList(riwayatList);
+          } else {
+            Swal.fire('Informasi', res ? res.message : 'Belum ada data ekskul yang terhubung.', 'info');
+          }
+        })
+        .catch(e => {
+          Swal.close();
+          Swal.fire('Error', e.message, 'error');
+        });
+    }
+
+    // 5. Saat Cabang Dipilih
+    function onCabangSelected(cabangId) {
+      activeCabangId = cabangId;
+      if (!cabangId) {
+        document.getElementById('list-santri-container').innerHTML = `
+          <div class="text-center py-4 text-muted">Pilih cabang ekskul di atas.</div>
+        `;
+        document.getElementById('label-santri-count').innerText = '0 Santri';
+        updateStatusBar();
+        return;
+      }
+
+      const cabang = masterCabang.find(c => c.id === cabangId);
+      if (!cabang) return;
+
+      currentPesertaList = (cabang.peserta || []).map(s => ({
+        idSantri: s.id,
+        nis: s.nis,
+        nama: s.nama,
+        kelas: s.kelas,
+        kehadiran: 'Hadir',
+        nilai: '',
+        catatan: ''
+      }));
+
+      document.getElementById('label-santri-count').innerText = currentPesertaList.length + ' Santri Terdaftar';
+      renderSantriList(currentPesertaList);
+      updateStatusBar();
+    }
+
+    // 6. Render Daftar Santri
+    function renderSantriList(list) {
+      const container = document.getElementById('list-santri-container');
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="text-center py-4 text-muted">Belum ada santri terdaftar di cabang ekskul ini.</div>`;
+        return;
+      }
+
+      let html = '';
+      list.forEach((s, idx) => {
+        const hActive = s.kehadiran === 'Hadir' ? 'btn-success text-white' : 'btn-outline-success';
+        const iActive = s.kehadiran === 'Izin' ? 'btn-warning text-dark' : 'btn-outline-warning';
+        const sActive = s.kehadiran === 'Sakit' ? 'btn-info text-white' : 'btn-outline-info';
+        const aActive = s.kehadiran === 'Alfa' ? 'btn-danger text-white' : 'btn-outline-danger';
+
+        html += `
+          <div class="santri-row" id="row-santri-${s.idSantri}" data-nama="${s.nama.toLowerCase()}" data-nis="${s.nis}">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <span class="badge bg-light text-secondary border me-1">${idx + 1}</span>
+                <strong class="text-dark">${s.nama}</strong>
+                <div class="text-muted" style="font-size: 11px;">NIS: ${s.nis} | Kelas: ${s.kelas}</div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2 pt-2 border-top">
+              <div class="btn-group status-btn-group" role="group">
+                <button type="button" class="btn btn-sm ${hActive}" onclick="setSantriStatus('${s.idSantri}', 'Hadir')">Hadir</button>
+                <button type="button" class="btn btn-sm ${iActive}" onclick="setSantriStatus('${s.idSantri}', 'Izin')">Izin</button>
+                <button type="button" class="btn btn-sm ${sActive}" onclick="setSantriStatus('${s.idSantri}', 'Sakit')">Sakit</button>
+                <button type="button" class="btn btn-sm ${aActive}" onclick="setSantriStatus('${s.idSantri}', 'Alfa')">Alfa</button>
+              </div>
+
+              <div class="d-flex align-items-center gap-1">
+                <label class="small text-muted mb-0 fw-semibold" style="font-size: 11px;">Nilai:</label>
+                <select class="form-select form-select-sm text-center fw-bold" style="width: 105px;" onchange="setSantriNilai('${s.idSantri}', this.value)">
+                  <option value="" ${!s.nilai ? 'selected' : ''}>- Nilai -</option>
+                  <option value="A" ${s.nilai === 'A' ? 'selected' : ''}>A (Sangat Baik)</option>
+                  <option value="B" ${s.nilai === 'B' ? 'selected' : ''}>B (Baik)</option>
+                  <option value="C" ${s.nilai === 'C' ? 'selected' : ''}>C (Cukup)</option>
+                  <option value="D" ${s.nilai === 'D' ? 'selected' : ''}>D (Bimbingan)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-2">
+              <input type="text" class="form-control form-control-sm" placeholder="Catatan perkembangan santri (opsional)..." value="${s.catatan || ''}" onchange="setSantriCatatan('${s.idSantri}', this.value)" style="font-size: 12px;">
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function setSantriStatus(idSantri, status) {
+      const s = currentPesertaList.find(x => x.idSantri === idSantri);
+      if (s) {
+        s.kehadiran = status;
+        renderSantriList(currentPesertaList);
+        updateStatusBar();
+      }
+    }
+
+    function setSantriNilai(idSantri, nilai) {
+      const s = currentPesertaList.find(x => x.idSantri === idSantri);
+      if (s) s.nilai = nilai;
+    }
+
+    function setSantriCatatan(idSantri, catatan) {
+      const s = currentPesertaList.find(x => x.idSantri === idSantri);
+      if (s) s.catatan = catatan;
+    }
+
+    function setSemuaPresensi(status) {
+      currentPesertaList.forEach(s => s.kehadiran = status);
+      renderSantriList(currentPesertaList);
+      updateStatusBar();
+    }
+
+    function updateStatusBar() {
+      let h = 0, i = 0, a = 0;
+      currentPesertaList.forEach(s => {
+        const st = (s.kehadiran || '').toLowerCase();
+        if (st === 'hadir') h++;
+        else if (st === 'izin') i++;
+        else a++;
+      });
+      document.getElementById('bar-hadir-count').innerText = 'Hadir: ' + h;
+      document.getElementById('bar-izin-count').innerText = 'Izin: ' + i;
+      document.getElementById('bar-alfa-count').innerText = 'Alfa/Sakit: ' + a;
+    }
+
+    function filterSantriListPwa(query) {
+      const q = (query || '').toLowerCase().trim();
+      const rows = document.querySelectorAll('.santri-row');
+      rows.forEach(r => {
+        const nama = r.getAttribute('data-nama') || '';
+        const nis = r.getAttribute('data-nis') || '';
+        if (!q || nama.indexOf(q) !== -1 || nis.indexOf(q) !== -1) {
+          r.style.display = 'block';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    // 7. Submit Jurnal & Presensi
+    function submitJurnalDanPresensi() {
+      if (!activeCabangId) {
+        Swal.fire('Peringatan', 'Silakan pilih cabang ekskul terlebih dahulu.', 'warning');
+        return;
+      }
+
+      const materi = document.getElementById('input-materi').value.trim();
+      if (!materi) {
+        Swal.fire('Materi Wajib Diisi', 'Silakan isi materi / agenda kegiatan latihan yang Ustadz ajarkan hari ini.', 'warning');
+        document.getElementById('input-materi').focus();
+        return;
+      }
+
+      const cabang = masterCabang.find(c => c.id === activeCabangId);
+      const payload = {
+        id_cabang: activeCabangId,
+        nama_ekskul: cabang ? cabang.nama : '',
+        nama_pengampu: activePengampu,
+        tanggal: document.getElementById('input-tanggal').value,
+        jam_mulai: document.getElementById('input-jam-mulai').value,
+        jam_selesai: document.getElementById('input-jam-selesai').value,
+        materi: materi,
+        kendala: document.getElementById('input-kendala').value.trim(),
+        santri_presensi: currentPesertaList
+      };
+
+      Swal.fire({
+        title: 'Simpan Jurnal & Presensi?',
+        html: `Apakah Ustadz yakin ingin menyimpan agenda materi latihan dan presensi <b>${currentPesertaList.length} santri</b>?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#065f46',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: '<i class="bi bi-check-circle me-1"></i> Ya, Simpan Sekarang',
+        cancelButtonText: 'Cek Ulang'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          executeSaveJurnal(payload);
+        }
+      });
+    }
+
+    function executeSaveJurnal(payload) {
+      const btn = document.getElementById('btn-submit-jurnal');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...`;
+
+      fetch(GAS_API_URL + '?api=ekskul_save_jurnal_presensi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(r => r.json())
+        .then(res => {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi</span>`;
+
+          if (res && res.success) {
+            Swal.fire({
+              title: 'Alhamdulillah!',
+              text: res.message || 'Jurnal materi dan presensi santri berhasil disimpan.',
+              icon: 'success',
+              confirmButtonColor: '#065f46'
+            });
+
+            document.getElementById('input-materi').value = '';
+            document.getElementById('input-kendala').value = '';
+            loadDataPengampu(activePengampu);
+          } else {
+            Swal.fire('Gagal Menyimpan', res ? res.message : 'Terjadi kesalahan sistem.', 'error');
+          }
+        })
+        .catch(e => {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi</span>`;
+          Swal.fire('Error', e.message, 'error');
+        });
+    }
+
+    // 8. Tab Switching
+    function switchPwaTab(tabName) {
+      if (tabName === 'input') {
+        document.getElementById('view-tab-input').style.display = 'block';
+        document.getElementById('view-tab-riwayat').style.display = 'none';
+        document.getElementById('tab-input-btn').classList.add('active');
+        document.getElementById('tab-riwayat-btn').classList.remove('active');
+        document.getElementById('bottom-save-bar').style.display = 'block';
+      } else {
+        document.getElementById('view-tab-input').style.display = 'none';
+        document.getElementById('view-tab-riwayat').style.display = 'block';
+        document.getElementById('tab-input-btn').classList.remove('active');
+        document.getElementById('tab-riwayat-btn').classList.add('active');
+        document.getElementById('bottom-save-bar').style.display = 'none';
+        renderRiwayatList(riwayatList);
+      }
+    }
+
+    // 9. Render Riwayat Sesi
+    function renderRiwayatList(list) {
+      const container = document.getElementById('riwayat-container');
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="text-center py-4 text-muted">Belum ada riwayat sesi mengajar yang tercatat.</div>`;
+        return;
+      }
+
+      let html = '';
+      list.forEach((r, idx) => {
+        const isLunas = (r.statusHonor || '').toLowerCase() === 'lunas';
+        const badgeHonor = isLunas 
+          ? `<span class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-2 py-1"><i class="bi bi-check-circle me-1"></i>Honor Lunas</span>`
+          : `<span class="badge bg-warning bg-opacity-10 text-warning border border-warning-subtle px-2 py-1"><i class="bi bi-hourglass-split me-1"></i>Menunggu Pencairan</span>`;
+
+        html += `
+          <div class="card border p-3 rounded-3 mb-2 bg-light bg-opacity-50">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="fw-bold text-primary">${r.namaEkskul}</span>
+              ${badgeHonor}
+            </div>
+            <div class="d-flex align-items-center gap-2 text-muted small mb-2" style="font-size: 11px;">
+              <span><i class="bi bi-calendar3 me-1"></i>${r.tanggal}</span>
+              <span>•</span>
+              <span><i class="bi bi-clock me-1"></i>${r.jamMulai || '-'} - ${r.jamSelesai || '-'}</span>
+              <span>•</span>
+              <span><i class="bi bi-people me-1"></i>${r.jumlahHadir} Santri Hadir</span>
+            </div>
+            <div class="small text-dark mb-1">
+              <strong>Materi:</strong> ${r.materi}
+            </div>
+            ${r.kendala && r.kendala !== '-' ? `<div class="small text-danger bg-danger bg-opacity-10 p-2 rounded mt-1"><strong>Kendala:</strong> ${r.kendala}</div>` : ''}
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
