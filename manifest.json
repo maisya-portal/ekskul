@@ -1,8 +1,10 @@
 {
   "name": "Ekskul Maisya - Jurnal & Presensi Pengampu",
-  "short_name": "Ekskul",
+  "short_name": "Ekskul Maisya",
   "description": "PWA Jurnal Agenda Materi & Presensi Pengampu Ekstrakurikuler Ponpes Imam Syafi'i Brebes",
+  "id": "./",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#065f46",

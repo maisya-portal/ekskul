@@ -190,6 +190,9 @@
         </div>
       </div>
       <div class="d-flex align-items-center gap-2">
+        <button id="btn-install-pwa" class="btn btn-sm btn-warning py-0 px-2 rounded-pill fw-bold d-none text-dark shadow-sm" onclick="promptInstallPwa()" style="font-size: 11px;">
+          <i class="bi bi-download me-1"></i> Install
+        </button>
         <span class="badge-role d-flex align-items-center gap-1">
           <i class="bi bi-person-badge"></i> Pengampu
         </span>
@@ -397,9 +400,106 @@
     // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(err => {
           console.log('SW registration error: ', err);
         });
+      });
+    }
+
+    // PWA Install Prompt Handler
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btnInstall = document.getElementById('btn-install-pwa');
+      if (btnInstall) btnInstall.classList.remove('d-none');
+    });
+
+    function promptInstallPwa() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('PWA Install accepted');
+        }
+        deferredPrompt = null;
+        const btnInstall = document.getElementById('btn-install-pwa');
+        if (btnInstall) btnInstall.classList.add('d-none');
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      const btnInstall = document.getElementById('btn-install-pwa');
+      if (btnInstall) btnInstall.classList.add('d-none');
+      deferredPrompt = null;
+    });
+
+    // ==========================================
+    // RESILIENT API CLIENT FOR GITHUB PAGES
+    // Mendukung fetch langsung & fallback JSONP otomatis bebas CORS block
+    // ==========================================
+    function gasApiGet(apiName, extraParams) {
+      let url = GAS_API_URL + '?api=' + encodeURIComponent(apiName);
+      if (extraParams) {
+        for (let key in extraParams) {
+          if (extraParams.hasOwnProperty(key)) {
+            url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(extraParams[key]);
+          }
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        fetch(url, { method: 'GET', mode: 'cors' })
+          .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+          })
+          .then(data => resolve(data))
+          .catch(err => {
+            console.warn('Fetch GET direct failed, attempting JSONP fallback...', err);
+            const cbName = 'gas_jsonp_' + Math.random().toString(36).substring(2, 9);
+            const jsonpUrl = url + '&callback=' + cbName;
+            const script = document.createElement('script');
+            script.src = jsonpUrl;
+
+            const timer = setTimeout(() => {
+              cleanUp();
+              reject(new Error('Koneksi timeout saat mengambil data dari server.'));
+            }, 25000);
+
+            function cleanUp() {
+              clearTimeout(timer);
+              if (script.parentNode) script.parentNode.removeChild(script);
+              delete window[cbName];
+            }
+
+            window[cbName] = function(data) {
+              cleanUp();
+              resolve(data);
+            };
+
+            script.onerror = function() {
+              cleanUp();
+              reject(new Error('Gagal memuat data dari server. Silakan periksa koneksi internet Ustadz.'));
+            };
+
+            document.body.appendChild(script);
+          });
+      });
+    }
+
+    function gasApiPost(apiName, payload) {
+      const url = GAS_API_URL + '?api=' + encodeURIComponent(apiName);
+      // PENTING: Gunakan text/plain agar browser TIDAK mengirimkan request OPTIONS preflight ke Google Apps Script
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      }).then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
       });
     }
 
@@ -430,8 +530,7 @@
     function fetchDaftarPengampu(autoSelectName) {
       document.getElementById('loading-pengampu').classList.remove('d-none');
       
-      fetch(GAS_API_URL + '?api=ekskul_get_pengampu')
-        .then(r => r.json())
+      gasApiGet('ekskul_get_pengampu')
         .then(res => {
           document.getElementById('loading-pengampu').classList.add('d-none');
           if (res && res.success && Array.isArray(res.data)) {
@@ -513,8 +612,7 @@
         didOpen: () => { Swal.showLoading(); }
       });
 
-      fetch(GAS_API_URL + '?api=ekskul_get_public_data&pengampu=' + encodeURIComponent(nama))
-        .then(r => r.json())
+      gasApiGet('ekskul_get_public_data', { pengampu: nama })
         .then(res => {
           Swal.close();
           if (res && res.success) {
@@ -741,12 +839,7 @@
       btn.disabled = true;
       btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...`;
 
-      fetch(GAS_API_URL + '?api=ekskul_save_jurnal_presensi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-        .then(r => r.json())
+      gasApiPost('ekskul_save_jurnal_presensi', payload)
         .then(res => {
           btn.disabled = false;
           btn.innerHTML = `<i class="bi bi-cloud-arrow-up-fill fs-5"></i><span>Simpan Sesi</span>`;
