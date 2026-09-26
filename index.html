@@ -175,6 +175,208 @@
       padding: 3px 8px;
       border-radius: 6px;
     }
+
+    /* ==========================================
+       SUPER COOL LOADING ANIMATION
+       ========================================== */
+    .loading-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px -5px rgba(6, 95, 70, 0.12), 0 4px 18px rgba(0, 0, 0, 0.04);
+      margin-top: -24px;
+      position: relative;
+      z-index: 10;
+      padding: 36px 24px 30px 24px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .loading-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #059669, #f59e0b, #10b981, #059669);
+      background-size: 300% 100%;
+      animation: gradientSlide 2s linear infinite;
+    }
+
+    @keyframes gradientSlide {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Centerpiece Visual Pulse & Ring */
+    .loader-orb-wrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader-spinning-ring {
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 3px dashed rgba(6, 95, 70, 0.35);
+      border-top-color: #059669;
+      border-right-color: #f59e0b;
+      animation: spinRing 3s linear infinite;
+    }
+
+    .loader-pulse-glow {
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(5, 150, 105, 0.28) 0%, rgba(245, 158, 11, 0.15) 70%, transparent 100%);
+      animation: pulseGlow 1.8s ease-in-out infinite alternate;
+    }
+
+    .loader-icon-core {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #065f46, #059669);
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 8px 20px rgba(6, 95, 70, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      position: relative;
+      z-index: 2;
+      animation: floatBob 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes spinRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.9); opacity: 0.5; }
+      100% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 12px rgba(5, 150, 105, 0.6)); }
+    }
+
+    @keyframes floatBob {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(-5px) scale(1.04); }
+    }
+
+    .loading-title {
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    .loading-desc {
+      color: #64748b;
+      font-size: 13px;
+      max-width: 380px;
+      margin: 0 auto 18px auto;
+      line-height: 1.5;
+    }
+
+    .loading-step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(6, 95, 70, 0.08);
+      color: #065f46;
+      border: 1px solid rgba(6, 95, 70, 0.18);
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 22px;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #059669;
+      box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7);
+      animation: dotPulse 1.4s infinite;
+    }
+
+    @keyframes dotPulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(5, 150, 105, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+    }
+
+    /* Skeleton Placeholder for Selector */
+    .skeleton-box {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: left;
+      border: 1.5px dashed #cbd5e1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skeleton-box::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -150%; width: 150%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+      animation: shimmerWave 1.6s infinite;
+    }
+
+    @keyframes shimmerWave {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(200%); }
+    }
+
+    .skeleton-line {
+      height: 11px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    /* Animation Transitions */
+    .animate-fadeInUp {
+      animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-fadeOut {
+      animation: fadeOut 0.35s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.97);
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -208,6 +410,45 @@
 
   <div class="container" style="max-width: 720px;">
 
+    <!-- Card 0: Card Loading Animasi Keren (Muncul instan sejak awal sebelum data pengampu termuat) -->
+    <div class="loading-card mb-3" id="box-loading-init">
+      <div class="loader-orb-wrap">
+        <div class="loader-spinning-ring"></div>
+        <div class="loader-pulse-glow"></div>
+        <div class="loader-icon-core">
+          <i class="bi bi-trophy-fill text-warning"></i>
+        </div>
+      </div>
+
+      <h5 class="loading-title">Menyiapkan Portal Ekskul</h5>
+      <p class="loading-desc" id="loading-init-desc">Menghubungkan ke database dan memuat jadwal pengampu ekstrakurikuler Ponpes Imam Syafi'i Brebes...</p>
+
+      <div class="loading-step-badge">
+        <span class="pulse-dot"></span>
+        <span id="loading-status-text">Memuat data pengampu ekskul...</span>
+      </div>
+
+      <!-- Skeleton Placeholder untuk Form Seleksi Pengampu -->
+      <div class="skeleton-box">
+        <div class="skeleton-line" style="width: 38%; height: 10px;"></div>
+        <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-white border">
+          <div class="d-flex align-items-center gap-2">
+            <div class="spinner-grow spinner-grow-sm text-success" role="status" style="width: 13px; height: 13px;"></div>
+            <span class="text-muted small fw-medium" id="skeleton-status-msg">Mengambil daftar ustadz &amp; cabang...</span>
+          </div>
+          <i class="bi bi-chevron-down text-muted small"></i>
+        </div>
+      </div>
+
+      <!-- Opsi Muat Ulang jika jaringan lambat -->
+      <div id="loading-retry-wrap" class="mt-3 d-none">
+        <p class="text-danger small mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Pemuatan membutuhkan waktu lebih lama.</p>
+        <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" onclick="fetchDaftarPengampu()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang Sekarang
+        </button>
+      </div>
+    </div>
+
     <!-- Card 1: Seleksi Pengampu (Jika belum dipilih) -->
     <div class="main-card mb-3" id="box-pilih-guru" style="display: none;">
       <div class="text-center py-2">
@@ -222,9 +463,6 @@
           <select class="form-select form-select-lg" id="select-pengampu" onchange="onPengampuSelected(this.value)">
             <option value="">-- Pilih Nama Pengampu --</option>
           </select>
-        </div>
-        <div id="loading-pengampu" class="text-muted small py-2 d-none">
-          <div class="spinner-border spinner-border-sm text-primary me-2"></div>Memuat daftar pengampu...
         </div>
       </div>
     </div>
@@ -526,14 +764,69 @@
       fetchDaftarPengampu(targetGuru);
     });
 
-    // 1. Fetch Daftar Pengampu
+    // Helper Transisi Halus dari Loading ke Konten Pilihan Guru
+    function transitionFromLoading(targetBoxId) {
+      const boxLoading = document.getElementById('box-loading-init');
+      const boxTarget = document.getElementById(targetBoxId);
+
+      if (boxLoading) {
+        boxLoading.classList.add('animate-fadeOut');
+        setTimeout(() => {
+          boxLoading.style.display = 'none';
+          boxLoading.classList.remove('animate-fadeOut');
+          if (boxTarget) {
+            boxTarget.style.display = 'block';
+            boxTarget.classList.add('animate-fadeInUp');
+          }
+        }, 320);
+      } else if (boxTarget) {
+        boxTarget.style.display = 'block';
+        boxTarget.classList.add('animate-fadeInUp');
+      }
+    }
+
+    // 1. Fetch Daftar Pengampu dengan Dynamic Shimmer & Loading Animation
+    let loadingInterval = null;
+
+    function startLoadingAnimation() {
+      const boxLoading = document.getElementById('box-loading-init');
+      if (!boxLoading) return;
+      boxLoading.style.display = 'block';
+
+      const statusEl = document.getElementById('loading-status-text');
+      const descEl = document.getElementById('loading-init-desc');
+      const skeletonMsg = document.getElementById('skeleton-status-msg');
+      const retryWrap = document.getElementById('loading-retry-wrap');
+      if (retryWrap) retryWrap.classList.add('d-none');
+
+      const steps = [
+        { status: "Menghubungkan ke server cloud...", desc: "Memverifikasi integrasi aman dengan Core Portal Kesantrian...", skeleton: "Sinkronisasi server..." },
+        { status: "Mengambil data pengampu ekskul...", desc: "Memuat daftar ustadz, pembina, serta cabang kegiatan ekstrakurikuler...", skeleton: "Memuat ustadz & pembina..." },
+        { status: "Menyiapkan form agenda & presensi...", desc: "Hampir selesai! Mengatur hak akses dan formulir materi santri...", skeleton: "Menyiapkan formulir..." }
+      ];
+
+      let stepIdx = 0;
+      clearInterval(loadingInterval);
+      loadingInterval = setInterval(() => {
+        stepIdx = (stepIdx + 1) % steps.length;
+        if (statusEl) statusEl.innerText = steps[stepIdx].status;
+        if (descEl) descEl.innerText = steps[stepIdx].desc;
+        if (skeletonMsg) skeletonMsg.innerText = steps[stepIdx].skeleton;
+      }, 1600);
+    }
+
+    function stopLoadingAnimation() {
+      clearInterval(loadingInterval);
+    }
+
     function fetchDaftarPengampu(autoSelectName) {
-      document.getElementById('loading-pengampu').classList.remove('d-none');
-      
+      startLoadingAnimation();
+
       gasApiGet('ekskul_get_pengampu')
         .then(res => {
-          document.getElementById('loading-pengampu').classList.add('d-none');
-          if (res && res.success && Array.isArray(res.data)) {
+          stopLoadingAnimation();
+
+          if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
             const sel = document.getElementById('select-pengampu');
             sel.innerHTML = '<option value="">-- Pilih Nama Pengampu --</option>';
             
@@ -544,25 +837,38 @@
               sel.appendChild(opt);
             });
 
-            if (autoSelectName) {
-              const found = res.data.some(p => p.nama.toLowerCase() === autoSelectName.toLowerCase());
-              if (found) {
-                sel.value = autoSelectName;
-                onPengampuSelected(autoSelectName);
-                return;
+            // Beri jeda 400ms agar user dapat menikmati loading animation yang halus
+            setTimeout(() => {
+              if (autoSelectName) {
+                const found = res.data.some(p => p.nama.toLowerCase() === autoSelectName.toLowerCase());
+                if (found) {
+                  sel.value = autoSelectName;
+                  transitionFromLoading('box-konten-guru');
+                  document.getElementById('label-pengampu-aktif').innerText = autoSelectName;
+                  document.getElementById('bottom-save-bar').style.display = 'block';
+                  loadDataPengampu(autoSelectName);
+                  return;
+                }
               }
-            }
 
-            document.getElementById('box-pilih-guru').style.display = 'block';
-            document.getElementById('box-konten-guru').style.display = 'none';
-            document.getElementById('bottom-save-bar').style.display = 'none';
+              // Munculkan pilihan nama guru dengan transisi fadeInUp yang keren
+              transitionFromLoading('box-pilih-guru');
+            }, 450);
+
           } else {
-            document.getElementById('box-pilih-guru').style.display = 'block';
+            // Data kosong atau respon tidak sesuai
+            setTimeout(() => {
+              transitionFromLoading('box-pilih-guru');
+            }, 400);
           }
         })
-        .catch(() => {
-          document.getElementById('loading-pengampu').classList.add('d-none');
-          document.getElementById('box-pilih-guru').style.display = 'block';
+        .catch(err => {
+          stopLoadingAnimation();
+          console.error('Fetch pengampu error:', err);
+          const statusEl = document.getElementById('loading-status-text');
+          if (statusEl) statusEl.innerText = "Gagal memuat data pengampu.";
+          const retryWrap = document.getElementById('loading-retry-wrap');
+          if (retryWrap) retryWrap.classList.remove('d-none');
         });
     }
 
@@ -575,6 +881,7 @@
       document.getElementById('label-pengampu-aktif').innerText = nama;
       document.getElementById('box-pilih-guru').style.display = 'none';
       document.getElementById('box-konten-guru').style.display = 'block';
+      document.getElementById('box-konten-guru').classList.add('animate-fadeInUp');
       document.getElementById('bottom-save-bar').style.display = 'block';
 
       loadDataPengampu(nama);
@@ -596,6 +903,7 @@
           localStorage.removeItem('maisya_guru_ekskul_selected');
           activePengampu = '';
           document.getElementById('box-pilih-guru').style.display = 'block';
+          document.getElementById('box-pilih-guru').classList.add('animate-fadeInUp');
           document.getElementById('box-konten-guru').style.display = 'none';
           document.getElementById('bottom-save-bar').style.display = 'none';
           document.getElementById('select-pengampu').value = '';
